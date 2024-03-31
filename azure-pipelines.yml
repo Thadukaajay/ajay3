@@ -8,7 +8,7 @@ trigger:
 
 pool:
   pool:
-          name: QG Build Servers
+          name: Testserver01
   environment:
           name: "VMenv"
           resourceType: VirtualMachine
