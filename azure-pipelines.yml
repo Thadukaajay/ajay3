@@ -16,5 +16,6 @@ jobs:
     name: VMenv
     resourceType: virtualMachine
     resourceName: TestServer01 # only deploy to the VM resource named USHAN-PC
+    tags: "service"
 
 
