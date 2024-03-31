@@ -28,8 +28,9 @@ stages:
 - stage: Build
   displayName: Build stage
   jobs:
-  - deployment: VMDeploy
-    displayName: Deploy to VM
+  - job: MavenPackageAndPublishArtifacts
+  - deployment: MavenPackageAndPublishArtifacts1
+    displayName: Maven Package and Publish Artifacts
     environment: 
       name: VMenv
       resourceType: virtualMachine
