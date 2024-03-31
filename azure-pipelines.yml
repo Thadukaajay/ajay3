@@ -3,22 +3,17 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
-trigger:
-- master
+trigger: 
+- main
 
-variables:
+pool:
+  pool:
+          name: QG Build Servers
+  environment:
+          name: "VMenv"
+          resourceType: VirtualMachine
+          #tags: "service"
 
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'b0b62edc-5a8b-4b5f-84e9-7f5c92542b77'
-
-  # Web app name
-  webAppName: 'ajaygoud'
-
-  # Environment name
-  #environmentName: 'ajaygoud558'
-
-  # Agent VM image name
-  #vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
@@ -26,8 +21,10 @@ stages:
   jobs:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
-    pool: 'ajay'
+    #pool: 'ajay'
       #vmImage: $(vmImageName)
+      
+      
 
     steps:
     - task: Maven@3
@@ -53,7 +50,7 @@ stages:
   - deployment: DeployLinuxWebApp
     displayName: Deploy Linux Web App
     environment: $(environmentName)
-    pool: 'ajay'
+    #pool: 'ajay'
       #vmImage: $(vmImageName)
     strategy:
       runOnce:
@@ -62,7 +59,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Azure Web App Deploy: ajaygoud558'
             inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
+              azureSubscription: 'AJAY222'
+              appType: 'webAppLinux'
+              appName: '$(webAppName)'
               package: '$(Pipeline.Workspace)/drop/**/target/*.?(war|jar)'
