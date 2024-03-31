@@ -7,6 +7,7 @@ trigger:
 - master
 pool: 
    vmImage: QG Build Servers
+   deployment:
    environment: 
     name: VMenv
     resourceType: virtualMachine
@@ -29,10 +30,11 @@ variables:
 stages:
 - stage: Build
   displayName: Build stage
-  jobs:
+  jobs: 
+
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
-    #pool: 'AJAY'
+  
       
 
     steps:
@@ -60,7 +62,7 @@ stages:
   - deployment: DeployLinuxWebApp
     displayName: Deploy Linux Web App
     environment: $(environmentName)
-    #pool: AJAY2
+  
     strategy:
       runOnce:
         deploy:
@@ -80,7 +82,7 @@ stages:
   - deployment: DeployLinuxWebApp
     displayName: Deploy Linux Web App
     environment: $(environmentName)
-    #pool: AJAY2
+   
     strategy:
       runOnce:
         deploy:
