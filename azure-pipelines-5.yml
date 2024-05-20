@@ -1,0 +1,81 @@
+parameters:
+- name: Clientcode
+  displayName: Client Code
+  type: string
+  default: ''
+- name: username
+  displayName: UserName
+  type: string
+  default: ''
+trigger:
+  branches:
+    include:
+    - None
+name: AJAY
+stages:
+- stage: ''
+  displayName: Add User to SCALE
+  jobs:
+  - job: getkey
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Output "Azure Subscription: affffffff"
+          Write-Output "Script Path: getSecret.ps1"
+        failOnStandardError: true
+      enabled: false
+    - task: PowerShell@2
+      displayName: key
+      inputs:
+        ScriptType: 'InlineScript'
+        Inline: |
+          Write-Output "Azure Subscription: affffffff"
+          Write-Output "Manh key not present in the key vault. Email sent to Call Center..."
+        FailOnStandardError: true
+      name: key
+  - deployment: ''
+    dependsOn:
+    - getkey
+    variables:
+    - name: mykey
+      value: $[ dependencies.getkey.outputs['key.MANHKey'] ]
+    environment:
+      name: SCALE STAGE SERVERS 2023
+      resourceType: virtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Output "Environment Name: SCALE STAGE SERVERS 2023"
+                Write-Output "My Key: $(mykey)"
+              failOnStderr: false
+  - deployment: ''
+    dependsOn:
+    - getkey
+    variables:
+    - name: mykey
+      value: $[ dependencies.getkey.outputs['key.MANHKey'] ]
+    environment:
+      name: SCALE PROD SERVERS 2023
+      resourceType: virtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Output "Environment Name: SCALE PROD SERVERS 2023"
+                Write-Output "My Key: $(mykey)"
+              failOnStderr: false
+
+
